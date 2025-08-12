@@ -1,4 +1,11 @@
+
 <?php
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+use League\CLImate\CLImate;
+$climate = new CLImate();
+require_once __DIR__ . '/../../modules/progress.php';
+
 
 /**
  * @category  Social_Engineering
@@ -18,6 +25,8 @@ define('BASE_URL', 'https://api.facebook.com/restserver.php');
  * End Library 
  */
 
+
+$climate = new CLImate();
 $save_dir = "config/token.txt";
 
 $input_username = $climate->br()->info()->input('Username?');
