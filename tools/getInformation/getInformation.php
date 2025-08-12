@@ -18,7 +18,18 @@ $wahyuarifpurnomo = curl_exec($curl);
 curl_close($curl);
 
 $decode = json_decode($wahyuarifpurnomo);
-$age = $decode->age_range->min;
+
+// Calculate age from birthday if available
+$age = 'Unknown';
+if (!empty($decode->birthday)) {
+	$birthDate = DateTime::createFromFormat('m/d/Y', $decode->birthday);
+	if ($birthDate) {
+		$today = new DateTime('now');
+		$age = $today->diff($birthDate)->y;
+	}
+} else if (isset($decode->age_range->min)) {
+	$age = $decode->age_range->min;
+}
 
 $climate->br()->info('Starting collect your Information..');
 echo "\n";
