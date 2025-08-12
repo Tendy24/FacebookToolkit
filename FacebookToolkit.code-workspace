@@ -18,6 +18,9 @@
 			"Wahyu",
 			"wahyuarifpurnomo",
 			"WARIFP"
+		],
+		"githubPullRequests.ignoredPullRequestBranches": [
+			"master"
 		]
 	}
 }
