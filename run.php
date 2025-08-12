@@ -21,7 +21,9 @@ require_once 'vendor/autoload.php';
 require_once 'modules/color.php';
 require_once 'modules/random.php';
 
-$climate = new League\CLImate\CLImate;
+use League\CLImate\CLImate;
+
+$climate = new CLImate();
 
 require_once 'modules/progress.php';
 require_once 'modules/menu.php';
