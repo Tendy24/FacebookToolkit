@@ -123,7 +123,7 @@
     ],
     "default": {
         "default_prompt": "Enter your prompt here",
-        "default_include_all_files": false,
+        "default_include_all_files": true,
         "default_include_entire_project_structure": true
     },
     "included_patterns": [
