@@ -38,19 +38,24 @@ $banner    = "
 
 $data_socialmedia = [
     [
-        "Facebook", "https://www.facebook.com/warifp",
+        "Facebook",
+        "https://www.facebook.com/warifp",
     ],
     [
-        "Instagram", "https://www.instagram.com/warifp",
+        "Instagram",
+        "https://www.instagram.com/warifp",
     ],
     [
-        "Twitter", "https://www.twitter.com/wahyuarifp",
+        "Twitter",
+        "https://www.twitter.com/wahyuarifp",
     ],
     [
-        "Linkedin", "https://id.linkedin.com/in/warifp",
+        "Linkedin",
+        "https://id.linkedin.com/in/warifp",
     ],
     [
-        "Github", "https://www.github.com/warifp",
+        "Github",
+        "https://www.github.com/warifp",
     ],
 ];
 
@@ -79,7 +84,8 @@ $climate->arguments->add(
             "longPrefix" => "update",
             "description" => "update version",
             "noValue" => true,
-        ], "help" => [
+        ],
+        "help" => [
             "prefix" => "h",
             "longPrefix" => "help",
             "description" => "help",
