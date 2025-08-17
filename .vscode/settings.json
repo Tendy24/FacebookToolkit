@@ -26,5 +26,6 @@
         "Wahyu",
         "wahyuarifpurnomo",
         "WARIFP"
-    ]
+    ],
+    "editor.formatOnSave": true
 }
