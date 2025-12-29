@@ -27,5 +27,11 @@
         "wahyuarifpurnomo",
         "WARIFP"
     ],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "git-autoconfig.configList": [
+        {
+            "user.Email": "mohneyamber24@gmail.com",
+            "user.name": "amber.mohney"
+        }
+    ]
 }
