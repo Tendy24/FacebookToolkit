@@ -1,1 +1,10 @@
+# How to get your Facebook Access Token
+# 1. Log in to your Facebook account.
+# 2. Go to Facebook’s Graph API Explorer: https://developers.facebook.com/tools/explorer/
+#    or create a Facebook App in the Facebook Developer portal.
+# 3. Generate an access token using the tool, selecting the required permissions.
+# 4. Copy the generated access token and paste it below (replace this text).
+#
+# WARNING: Never share your token publicly. It grants access to your Facebook data.
+
 EAAAAUaZA8jlABPLaVQdRnLDNl4ZAHLcCy8Hn75li3KZAXR8NazDZBRUSpIcDZB5c7TKjI4Y72Q2wtqxg2d4JZCfAFWPtOVp7vNqR9powTZCsj3YcbacNY7KtvuoIelBdNUZA9T6gsqWfePz3kL4TbBMZCq93I1OjUQclaTq0W2NkstjHBZCaWHqBWRUQxntqbFTgiGhkkX2QZDZD
