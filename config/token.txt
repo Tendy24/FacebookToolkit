@@ -6,5 +6,3 @@
 # 4. Copy the generated access token and paste it below (replace this text).
 #
 # WARNING: Never share your token publicly. It grants access to your Facebook data.
-
-EAAAAUaZA8jlABPLaVQdRnLDNl4ZAHLcCy8Hn75li3KZAXR8NazDZBRUSpIcDZB5c7TKjI4Y72Q2wtqxg2d4JZCfAFWPtOVp7vNqR9powTZCsj3YcbacNY7KtvuoIelBdNUZA9T6gsqWfePz3kL4TbBMZCq93I1OjUQclaTq0W2NkstjHBZCaWHqBWRUQxntqbFTgiGhkkX2QZDZD
