@@ -1,6 +1,6 @@
 {
-    "require": {
-        "league/climate": "^3.10",
-        "paquettg/php-html-parser": "^2.0"
-    }
+  "require": {
+    "league/climate": "^3.10",
+    "paquettg/php-html-parser": "^3.1"
+  }
 }
