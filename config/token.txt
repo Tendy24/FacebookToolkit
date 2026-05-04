@@ -4,5 +4,3 @@
 #    or create a Facebook App in the Facebook Developer portal.
 # 3. Generate an access token using the tool, selecting the required permissions.
 # 4. Copy the generated access token and paste it below (replace this text).
-#  EAAbfROjYFmQBQxtpqc9w7ObsIZAGV34Q2VYKQtZCmBZAxndzZCcZC59mE1AdME0RBGiE8eso3G7pzZAvOXkh3I9sQMd1k0CZC5EIkcnmmDeR1JtC12cdZCJGhlfa0T0a9lnScrEmPGQuldIqvCbroE1ZAc7ZArJ8HSo1rVdy963qdtHea1ZB9DUpGJ22AMqkpHYQNYtRcfIL2mAr8IuXQ4lx4jlXkZCn3Kr5IhOKhaZBs
-# WARNING: Never share your token publicly. It grants access to your Facebook data.
