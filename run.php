@@ -79,6 +79,9 @@ $pilih = $input_pilih->prompt();
  * End Select 
  */
 
+$type = "";
+$namatools = "";
+
 if ($pilih > 29 or $pilih < 1) {
     $climate->br()->error('Options not available, please choose existing ones!');
 
