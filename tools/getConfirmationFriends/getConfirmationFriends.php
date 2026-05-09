@@ -34,7 +34,7 @@ foreach ($decode->data as $hasil) {
     $namerequests = $hasil->from->name;
     $idrequests = $hasil->from->id;
     if (!empty($idrequests)) {
-        echo $no . "." . $colors->getColoredString(" $namerequests | $idrequests", $warifp[$colorstring]) . "\n";
+        echo $no . "." . $colors->getColoredString(" $namerequests | $idrequests", $Tendy24[$colorstring]) . "\n";
         $save = fopen('tmp/id_requests_friends.log', 'a');
         fwrite($save, $idrequests . "\n");
         fclose($save);
@@ -62,9 +62,9 @@ for ($a = 0; $a < count($data); $a++) {
     curl_close($curl);
     $colorstring = getName($n);
     if ($wahyuarifpurnomo == true) {
-        echo $x . "." . $colors->getColoredString(" ID : $id | Success confirmation ..", $warifp[$colorstring]) . "\n";
+        echo $x . "." . $colors->getColoredString(" ID : $id | Success confirmation ..", $Tendy24[$colorstring]) . "\n";
     } else {
-        echo $x . "." . $colors->getColoredString(" ID : $id | Failed to confirmation ..", $warifp[$colorstring]) . "\n";
+        echo $x . "." . $colors->getColoredString(" ID : $id | Failed to confirmation ..", $Tendy24[$colorstring]) . "\n";
     }
 }
 

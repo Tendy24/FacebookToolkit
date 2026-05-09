@@ -40,7 +40,7 @@ foreach ($data as $key => $email) {
             fclose($x);
         }
     }
-    echo $no . "." . $colors->getColoredString(" $email", $warifp[$colorstring]) . "\n";
+    echo $no . "." . $colors->getColoredString(" $email", $Tendy24[$colorstring]) . "\n";
 }
 
 $climate->br()->shout('Done, filtering your list.');

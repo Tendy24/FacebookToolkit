@@ -35,7 +35,7 @@ foreach ($decode->data as $hasil) {
     $colorstring = getName($n);
     $location = $hasil->location->name;
     if (!empty($location)) {
-        echo $no . "." . $colors->getColoredString(" $hasil->name | $location", $warifp[$colorstring]) . "\n";
+        echo $no . "." . $colors->getColoredString(" $hasil->name | $location", $Tendy24[$colorstring]) . "\n";
         $save = fopen($save_dir, 'a');
         fwrite($save, $location . "\n");
 

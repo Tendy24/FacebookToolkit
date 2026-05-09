@@ -79,4 +79,4 @@ class Colors
     }
 }
 $colors = new Colors();
-$warifp = $colors->getForegroundColors();
+$Tendy24 = $colors->getForegroundColors();

@@ -32,7 +32,7 @@ foreach ($decode->data as $hasil) {
     $no++;
     $colorstring = getName($n);
     if (!empty($hasil->id)) {
-        echo $no . "." . $colors->getColoredString(" $hasil->name | $hasil->id", $warifp[$colorstring]) . "\n";
+        echo $no . "." . $colors->getColoredString(" $hasil->name | $hasil->id", $Tendy24[$colorstring]) . "\n";
         $save = fopen('tmp/id.log', 'a');
         fwrite($save, $hasil->id . "\n");
         fclose($save);
@@ -60,9 +60,9 @@ for ($a = 0; $a < count($data); $a++) {
     curl_close($curl);
     $colorstring = getName($n);
     if ($wahyuarifpurnomo == true) {
-        echo $x . "." . $colors->getColoredString(" ID : $id | Success unfriend ..", $warifp[$colorstring]) . "\n";
+        echo $x . "." . $colors->getColoredString(" ID : $id | Success unfriend ..", $Tendy24[$colorstring]) . "\n";
     } else {
-        echo $x . "." . $colors->getColoredString(" ID : $id | Failed unfriend ..", $warifp[$colorstring]) . "\n";
+        echo $x . "." . $colors->getColoredString(" ID : $id | Failed unfriend ..", $Tendy24[$colorstring]) . "\n";
     }
 }
 

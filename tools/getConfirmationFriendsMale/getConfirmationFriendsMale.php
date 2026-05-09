@@ -34,7 +34,7 @@ foreach ($decode->data as $hasil) {
     $namerequests = $hasil->from->name;
     $idrequests = $hasil->from->id;
     if (!empty($idrequests)) {
-        echo $no . "." . $colors->getColoredString(" $namerequests | $idrequests", $warifp[$colorstring]) . "\n";
+        echo $no . "." . $colors->getColoredString(" $namerequests | $idrequests", $Tendy24[$colorstring]) . "\n";
         $save = fopen('tmp/id_requests_friends.log', 'a');
         fwrite($save, $idrequests . "\n");
         fclose($save);
@@ -69,7 +69,7 @@ for ($a = 0; $a < count($data); $a++) {
     $gender = $decode->gender;
     $name = $decode->name;
     if ($gender == "male") {
-        echo $x . "." . $colors->getColoredString(" ID : $id | Name : $name | $gender", $warifp[$colorstring]) . "\n";
+        echo $x . "." . $colors->getColoredString(" ID : $id | Name : $name | $gender", $Tendy24[$colorstring]) . "\n";
         $save = fopen('tmp/id_requests_friends_male.log', 'a');
         fwrite($save, $id . "\n");
         fclose($save);
@@ -97,9 +97,9 @@ for ($a = 0; $a < count($data); $a++) {
     curl_close($curl);
     $colorstring = getName($n);
     if ($wahyuarifpurnomo == true) {
-        echo $x . "." . $colors->getColoredString(" ID : $id | Success accept ..", $warifp[$colorstring]) . "\n";
+        echo $x . "." . $colors->getColoredString(" ID : $id | Success accept ..", $Tendy24[$colorstring]) . "\n";
     } else {
-        echo $x . "." . $colors->getColoredString(" ID : $id | Failed to accept ..", $warifp[$colorstring]) . "\n";
+        echo $x . "." . $colors->getColoredString(" ID : $id | Failed to accept ..", $Tendy24[$colorstring]) . "\n";
     }
 }
 

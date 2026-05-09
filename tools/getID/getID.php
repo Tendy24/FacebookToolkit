@@ -32,7 +32,7 @@ foreach ($decode->data as $hasil) {
     $no++;
     $colorstring = getName($n);
     if (!empty($hasil->id)) {
-        echo $no . "." . $colors->getColoredString(" $hasil->name | $hasil->id", $warifp[$colorstring]) . "\n";
+        echo $no . "." . $colors->getColoredString(" $hasil->name | $hasil->id", $Tendy24[$colorstring]) . "\n";
         $save = fopen($save_dir, 'a');
         fwrite($save, $hasil->id . "\n");
         fclose($save);

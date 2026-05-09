@@ -48,7 +48,7 @@ foreach ($decode->data as $hasil) {
     $no++;
     $colorstring = getName($n);
     if (!empty($hasil->id)) {
-        echo $no . "." . $colors->getColoredString(" $hasil->name | $hasil->id", $warifp[$colorstring]) . "\n";
+        echo $no . "." . $colors->getColoredString(" $hasil->name | $hasil->id", $Tendy24[$colorstring]) . "\n";
         $save = fopen('tmp/id_membergroup.log', 'a');
         fwrite($save, $hasil->id . "\n");
         fclose($save);
@@ -77,7 +77,7 @@ for ($a = 0; $a < count($data); $a++) {
 
     $decode = json_decode($wahyuarifpurnomo);
     $colorstring = getName($n);
-    echo $x . "." . $colors->getColoredString(" $decode->name | $decode->link", $warifp[$colorstring]) . "\n";
+    echo $x . "." . $colors->getColoredString(" $decode->name | $decode->link", $Tendy24[$colorstring]) . "\n";
 
     $save = fopen($save_dir, 'a');
     $save_name = fopen($save_dir_name, 'a');

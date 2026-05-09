@@ -47,13 +47,13 @@ for ($a = 0; $a < count($data); $a++) {
     $colorstring = getName($n);
 
     if ($hasil->status === "live") {
-        echo $x . "." . $colors->getColoredString(" $email | ", $warifp[$colorstring]) . "\e[1;92mLive\e[0m\n";
-        $warifp = fopen($save_live, "a+");
-        fwrite($warifp, $email . "\r\n");
+        echo $x . "." . $colors->getColoredString(" $email | ", $Tendy24[$colorstring]) . "\e[1;92mLive\e[0m\n";
+        $Tendy24 = fopen($save_live, "a+");
+        fwrite($Tendy24, $email . "\r\n");
     } else {
-        echo $x . "." . $colors->getColoredString(" $email | ", $warifp[$colorstring]) . "\e[0;31mDead\e[0m\n";
-        $warifp = fopen($save_dead, "a+");
-        fwrite($warifp, $email . "\r\n");
+        echo $x . "." . $colors->getColoredString(" $email | ", $Tendy24[$colorstring]) . "\e[0;31mDead\e[0m\n";
+        $Tendy24 = fopen($save_dead, "a+");
+        fwrite($Tendy24, $email . "\r\n");
     }
 }
 

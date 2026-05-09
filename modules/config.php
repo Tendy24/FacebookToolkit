@@ -244,8 +244,8 @@ function tokenvalidation($url_based, $token)
     if ($input->confirmed()) {
         $climate->br()->info('Based on the data I have about you, your name must be ' . $decode->name . ', you were born on ' . $decode->birthday . ', you are sex ' . $decode->gender . ', I know, you must live in ' . $location . ', hmmm.. i know, you`re ' . $decode->relationship_status . ', and you are still in school at ' . $education);
         sleep(3);
-        $warifp = $climate->br()->shout()->input('Yes? [enter to continue]');
-        $response = $warifp->prompt();
+        $Tendy24 = $climate->br()->shout()->input('Yes? [enter to continue]');
+        $response = $Tendy24->prompt();
     } else {
     }
 }
