@@ -19,10 +19,32 @@ $update         = "02 November 2019 17.23";
 $url_based      = "https://graph.facebook.com";
 $url_token      = "config/token.txt";
 $cek_connection = "graph.facebook.com";
-$progress;
+
+// Fallback defaults keep this module safe when analyzed or loaded in isolation.
+if (!isset($progress)) {
+    $progress = null;
+}
+
+if (!isset($data_menu)) {
+    $data_menu = [];
+}
+
 $url_valid = "http://widhitools.000webhostapp.com/api/yahoo.php";
 $url_brute = "https://m.facebook.com";
-$token = file_get_contents($url_token);
+$token_file_content = file_get_contents($url_token);
+$token = '';
+
+if ($token_file_content !== false) {
+    $token_lines = preg_split('/\r\n|\r|\n/', $token_file_content);
+    foreach ($token_lines as $line) {
+        $candidate = trim($line);
+        if ($candidate === '' || strpos($candidate, '#') === 0) {
+            continue;
+        }
+        $token = $candidate;
+        break;
+    }
+}
 $banner    = "
  _______  _______    _       _      ||
 |       ||       | _| |_   _| |_    || Author  : $author
@@ -149,31 +171,57 @@ function tokenvalidation($url_based, $token)
     include_once 'vendor/autoload.php';
     $climate = new League\CLImate\CLImate;
 
+    $normalized_token = trim($token);
+
+    if ($normalized_token === '') {
+        $climate->br()->backgroundRed()->out('Sorry, token is empty, please correct it!');
+        $type = "tools/getAccessToken/getAccessToken";
+        include_once $type . ".php";
+        exit;
+    }
+
     $curl = curl_init();
-    curl_setopt($curl, CURLOPT_URL, $url_based . "/me/?access_token=" . $token);
+    curl_setopt($curl, CURLOPT_URL, $url_based . "/me/?access_token=" . urlencode($normalized_token));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
     $wahyuarifpurnomo = curl_exec($curl);
+    $curl_error = curl_error($curl);
     curl_close($curl);
 
-    $decode = json_decode($wahyuarifpurnomo);
+    if (!empty($curl_error)) {
+        $climate->br()->backgroundRed()->out('Sorry, request failed: ' . $curl_error);
+        exit;
+    }
 
-    if ($decode->error->message === "Malformed access token") {
-        $climate->br()->backgroundRed()->out('Sorry, ' . $decode->error->message . ', please correct it!');
+    $decode = json_decode($wahyuarifpurnomo);
+    $error_message = isset($decode->error->message) ? $decode->error->message : '';
+
+    if ($error_message === "Malformed access token") {
+        $climate->br()->backgroundRed()->out('Sorry, ' . $error_message . ', please correct it!');
         $type = "tools/getAccessToken/getAccessToken";
         include_once $type . ".php";
         exit;
-    } else if ($decode->error->message == 'The access token could not be decrypted') {
-        $climate->br()->backgroundRed()->out('Sorry, ' . $decode->error->message . ', please correct it!');
+    } else if ($error_message == 'The access token could not be decrypted') {
+        $climate->br()->backgroundRed()->out('Sorry, ' . $error_message . ', please correct it!');
         $type = "tools/getAccessToken/getAccessToken";
         include_once $type . ".php";
         exit;
-    } else if ($decode->error->message == 'Error validating access token: The session has been invalidated because the user changed their password or Facebook has changed the session for security reasons.') {
-        $climate->br()->backgroundRed()->out('Sorry, ' . $decode->error->message . ', please correct it!');
+    } else if ($error_message == 'Error validating access token: The session has been invalidated because the user changed their password or Facebook has changed the session for security reasons.') {
+        $climate->br()->backgroundRed()->out('Sorry, ' . $error_message . ', please correct it!');
         $type = "tools/getAccessToken/getAccessToken";
         include_once $type . ".php";
         exit;
-    } else if ($decode->error->message == 'An active access token must be used to query information about the current user') {
-        $climate->br()->backgroundRed()->out('Sorry, ' . $decode->error->message . ', please correct it!');
+    } else if ($error_message == 'An active access token must be used to query information about the current user') {
+        $climate->br()->backgroundRed()->out('Sorry, ' . $error_message . ', please correct it!');
+        $type = "tools/getAccessToken/getAccessToken";
+        include_once $type . ".php";
+        exit;
+    } else if ($error_message !== '') {
+        $climate->br()->backgroundRed()->out('Sorry, ' . $error_message . ', please correct it!');
+        $type = "tools/getAccessToken/getAccessToken";
+        include_once $type . ".php";
+        exit;
+    } else if (!is_object($decode) || empty($decode->id)) {
+        $climate->br()->backgroundRed()->out('Sorry, token validation failed: invalid response from Graph API.');
         $type = "tools/getAccessToken/getAccessToken";
         include_once $type . ".php";
         exit;
