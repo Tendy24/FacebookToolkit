@@ -70,6 +70,15 @@ test("GET /api/time returns epoch and iso", async () => {
 	assert.equal(typeof body.iso, "string");
 });
 
+test("GET /favicon.ico serves icon", async () => {
+	const response = await fetch(`${baseUrl}/favicon.ico`);
+
+	assert.equal(response.status, 200);
+	assert.equal(response.headers.get("content-type"), "image/x-icon");
+	const bytes = await response.arrayBuffer();
+	assert.ok(bytes.byteLength > 0);
+});
+
 test("POST /health returns 405 and allow header", async () => {
 	const { response, body } = await requestJson("/health", { method: "POST" });
 

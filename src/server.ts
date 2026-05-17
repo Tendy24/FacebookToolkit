@@ -1,10 +1,21 @@
 /// <reference types="node" />
 
 import * as http from "http";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = "0.0.0.0";
+const RATE_LIMIT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS) || 60_000;
+const RATE_LIMIT_MAX_REQUESTS = Number(process.env.RATE_LIMIT_MAX_REQUESTS) || 60;
 let requestCounter = 0;
+
+type RateLimitEntry = {
+	count: number;
+	windowStartMs: number;
+};
+
+const rateLimitByClient = new Map<string, RateLimitEntry>();
 
 const writeJson = (
 	res: http.ServerResponse,
@@ -51,10 +62,30 @@ const getPathname = (req: http.IncomingMessage) => {
 
 const ROUTE_METHODS: Record<string, string[]> = {
 	"/": ["GET"],
+	"/favicon.ico": ["GET"],
 	"/health": ["GET"],
 	"/api/time": ["GET"],
 	"/echo": ["POST"],
 };
+
+const getFaviconPath = () => {
+	const candidates = [
+		path.join(process.cwd(), "favicon.ico"),
+		path.join(__dirname, "favicon.ico"),
+		path.join(__dirname, "..", "favicon.ico"),
+	];
+
+	for (const candidate of candidates) {
+		if (fs.existsSync(candidate)) {
+			return candidate;
+		}
+	}
+
+	return null;
+};
+
+const faviconPath = getFaviconPath();
+const faviconBuffer = faviconPath ? fs.readFileSync(faviconPath) : null;
 
 const readJsonBody = async (req: http.IncomingMessage): Promise<unknown> => {
 	const chunks: Buffer[] = [];
@@ -81,14 +112,55 @@ const isJsonContentType = (req: http.IncomingMessage) => {
 	return value.toLowerCase().startsWith("application/json");
 };
 
+const getClientKey = (req: http.IncomingMessage) => {
+	return req.socket.remoteAddress || "unknown";
+};
+
+const checkRateLimit = (clientKey: string, nowMs: number) => {
+	const current = rateLimitByClient.get(clientKey);
+	if (!current || nowMs - current.windowStartMs >= RATE_LIMIT_WINDOW_MS) {
+		rateLimitByClient.set(clientKey, { count: 1, windowStartMs: nowMs });
+		return { allowed: true, remaining: RATE_LIMIT_MAX_REQUESTS - 1, retryAfterMs: 0 };
+	}
+
+	if (current.count >= RATE_LIMIT_MAX_REQUESTS) {
+		const retryAfterMs = RATE_LIMIT_WINDOW_MS - (nowMs - current.windowStartMs);
+		return { allowed: false, remaining: 0, retryAfterMs };
+	}
+
+	current.count += 1;
+	return {
+		allowed: true,
+		remaining: RATE_LIMIT_MAX_REQUESTS - current.count,
+		retryAfterMs: 0,
+	};
+};
+
 export const createServer = () =>
 	http.createServer(async (req: http.IncomingMessage, res: http.ServerResponse) => {
+		const nowMs = Date.now();
 		const method = req.method || "GET";
 		const pathname = getPathname(req);
 		const requestId = nextRequestId();
+		const clientKey = getClientKey(req);
+		const limitResult = checkRateLimit(clientKey, nowMs);
 
 		res.setHeader("X-Request-Id", requestId);
+		res.setHeader("X-RateLimit-Limit", String(RATE_LIMIT_MAX_REQUESTS));
+		res.setHeader("X-RateLimit-Remaining", String(limitResult.remaining));
 		attachRequestLogger(res, requestId, method, pathname);
+
+		if (!limitResult.allowed) {
+			const retryAfterSeconds = Math.ceil(limitResult.retryAfterMs / 1000);
+			res.setHeader("Retry-After", String(retryAfterSeconds));
+			writeJson(res, 429, {
+				error: "Too Many Requests",
+				requestId,
+				path: pathname,
+				retryAfterSeconds,
+			});
+			return;
+		}
 
 		const allowedMethods = ROUTE_METHODS[pathname];
 
@@ -108,11 +180,32 @@ export const createServer = () =>
 				name: "Sample HTTP API",
 				routes: [
 					{ method: "GET", path: "/" },
+					{ method: "GET", path: "/favicon.ico" },
 					{ method: "GET", path: "/health" },
 					{ method: "GET", path: "/api/time" },
 					{ method: "POST", path: "/echo" },
 				],
 			});
+			return;
+		}
+
+		if (method === "GET" && pathname === "/favicon.ico") {
+			if (!faviconBuffer) {
+				writeJson(res, 404, {
+					error: "Not Found",
+					requestId,
+					method,
+					path: pathname,
+					timestamp: new Date().toISOString(),
+				});
+				return;
+			}
+
+			res.writeHead(200, {
+				"Content-Type": "image/x-icon",
+				"Cache-Control": "public, max-age=86400",
+			});
+			res.end(faviconBuffer);
 			return;
 		}
 
