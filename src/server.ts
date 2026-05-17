@@ -71,6 +71,16 @@ const readJsonBody = async (req: http.IncomingMessage): Promise<unknown> => {
 	return JSON.parse(rawBody);
 };
 
+const isJsonContentType = (req: http.IncomingMessage) => {
+	const contentType = req.headers["content-type"];
+	if (!contentType) {
+		return false;
+	}
+
+	const value = Array.isArray(contentType) ? contentType[0] : contentType;
+	return value.toLowerCase().startsWith("application/json");
+};
+
 export const createServer = () =>
 	http.createServer(async (req: http.IncomingMessage, res: http.ServerResponse) => {
 		const method = req.method || "GET";
@@ -123,6 +133,16 @@ export const createServer = () =>
 		}
 
 		if (method === "POST" && pathname === "/echo") {
+			if (!isJsonContentType(req)) {
+				writeJson(res, 415, {
+					error: "Unsupported Media Type",
+					requestId,
+					path: pathname,
+					expectedContentType: "application/json",
+				});
+				return;
+			}
+
 			try {
 				const body = await readJsonBody(req);
 				writeJson(res, 200, {

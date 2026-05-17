@@ -114,6 +114,20 @@ test("POST /echo with invalid JSON returns 400", async () => {
 	assert.equal(typeof body.requestId, "string");
 });
 
+test("POST /echo with non-JSON content type returns 415", async () => {
+	const response = await fetch(`${baseUrl}/echo`, {
+		method: "POST",
+		headers: { "Content-Type": "text/plain" },
+		body: "hello",
+	});
+	const body = await response.json();
+
+	assert.equal(response.status, 415);
+	assert.equal(body.error, "Unsupported Media Type");
+	assert.equal(body.expectedContentType, "application/json");
+	assert.equal(typeof body.requestId, "string");
+});
+
 test("GET unknown route returns 404", async () => {
 	const { response, body } = await requestJson("/nope");
 
