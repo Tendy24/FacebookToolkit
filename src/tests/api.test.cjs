@@ -48,6 +48,7 @@ test("GET / returns API index", async () => {
 	const { response, body } = await requestJson("/");
 
 	assert.equal(response.status, 200);
+	assert.equal(typeof response.headers.get("x-request-id"), "string");
 	assert.equal(body.name, "Sample HTTP API");
 	assert.ok(Array.isArray(body.routes));
 	assert.ok(body.routes.some((route) => route.path === "/echo" && route.method === "POST"));
@@ -75,6 +76,7 @@ test("POST /health returns 405 and allow header", async () => {
 	assert.equal(response.status, 405);
 	assert.equal(response.headers.get("allow"), "GET");
 	assert.equal(body.error, "Method Not Allowed");
+	assert.equal(typeof body.requestId, "string");
 });
 
 test("POST /echo returns echoed JSON body", async () => {
@@ -96,6 +98,7 @@ test("GET /echo returns 405 and allow header", async () => {
 	assert.equal(response.status, 405);
 	assert.equal(response.headers.get("allow"), "POST");
 	assert.equal(body.error, "Method Not Allowed");
+	assert.equal(typeof body.requestId, "string");
 });
 
 test("POST /echo with invalid JSON returns 400", async () => {
@@ -108,6 +111,7 @@ test("POST /echo with invalid JSON returns 400", async () => {
 
 	assert.equal(response.status, 400);
 	assert.equal(body.error, "Invalid JSON body");
+	assert.equal(typeof body.requestId, "string");
 });
 
 test("GET unknown route returns 404", async () => {
@@ -115,4 +119,5 @@ test("GET unknown route returns 404", async () => {
 
 	assert.equal(response.status, 404);
 	assert.equal(body.error, "Not Found");
+	assert.equal(typeof body.requestId, "string");
 });

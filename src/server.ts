@@ -4,6 +4,7 @@ import * as http from "http";
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = "0.0.0.0";
+let requestCounter = 0;
 
 const writeJson = (
 	res: http.ServerResponse,
@@ -14,15 +15,31 @@ const writeJson = (
 	res.end(JSON.stringify(payload));
 };
 
+const nextRequestId = () => {
+	requestCounter += 1;
+	return `req-${Date.now()}-${requestCounter}`;
+};
+
 const attachRequestLogger = (
-	req: http.IncomingMessage,
-	res: http.ServerResponse
+	res: http.ServerResponse,
+	requestId: string,
+	method: string,
+	pathname: string
 ) => {
 	const startedAt = Date.now();
 	res.on("finish", () => {
 		const durationMs = Date.now() - startedAt;
 		console.log(
-			`${req.method || "GET"} ${req.url || "/"} -> ${res.statusCode} (${durationMs}ms)`
+			JSON.stringify({
+				level: "info",
+				message: "request_completed",
+				requestId,
+				method,
+				path: pathname,
+				statusCode: res.statusCode,
+				durationMs,
+				timestamp: new Date().toISOString(),
+			})
 		);
 	});
 };
@@ -56,16 +73,20 @@ const readJsonBody = async (req: http.IncomingMessage): Promise<unknown> => {
 
 export const createServer = () =>
 	http.createServer(async (req: http.IncomingMessage, res: http.ServerResponse) => {
-		attachRequestLogger(req, res);
-
 		const method = req.method || "GET";
 		const pathname = getPathname(req);
+		const requestId = nextRequestId();
+
+		res.setHeader("X-Request-Id", requestId);
+		attachRequestLogger(res, requestId, method, pathname);
+
 		const allowedMethods = ROUTE_METHODS[pathname];
 
 		if (allowedMethods && !allowedMethods.includes(method)) {
 			res.setHeader("Allow", allowedMethods.join(", "));
 			writeJson(res, 405, {
 				error: "Method Not Allowed",
+				requestId,
 				method,
 				path: pathname,
 			});
@@ -111,6 +132,7 @@ export const createServer = () =>
 			} catch {
 				writeJson(res, 400, {
 					error: "Invalid JSON body",
+					requestId,
 					path: pathname,
 				});
 			}
@@ -119,6 +141,7 @@ export const createServer = () =>
 
 		writeJson(res, 404, {
 			error: "Not Found",
+			requestId,
 			method,
 			path: pathname,
 			timestamp: new Date().toISOString(),
